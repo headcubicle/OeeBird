@@ -9,31 +9,49 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="jp.headcubicle.oeebird.MainActivity" >
 
-    
+    <!-- 自分のツイッターアカウント -->
     <EditText 
         android:id="@+id/my_twitter_account"
        	android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:inputType="text"/>
 
+    <!-- 自分のツイッターパスワード -->
     <EditText 
         android:id="@+id/my_twitter_password"
        	android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:inputType="textPassword"/>
 
+    <!-- 相手のツイッターアカウント -->
     <EditText 
         android:id="@+id/target_twitter_account"
        	android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:inputType="text"/>
     
+    <!-- リプライする内容 -->
+    <EditText 
+        android:id="@+id/reply_text"
+       	android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:inputType="text"/>
+    
+    <!-- 末尾 -->
+    <EditText 
+        android:id="@+id/tail_text"
+       	android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:inputType="text"/>
+    
+    <!-- 設定 -->
     <Button
         android:id="@+id/button_setting"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/button_label_setting" />
 
+    <!-- サービス起動 -->
     <Button
         android:id="@+id/button_run"
         android:layout_width="fill_parent"
