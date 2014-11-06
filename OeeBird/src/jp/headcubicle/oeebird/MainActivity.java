@@ -1,9 +1,14 @@
 package jp.headcubicle.oeebird;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 public class MainActivity extends Activity {
 
@@ -11,6 +16,25 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// 設定値を読み込む。
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		// 自分のTwitterアカウント
+		EditText myTwitterAccountEdit = (EditText) findViewById(R.id.my_twitter_account);
+		myTwitterAccountEdit.setText(sharedPreferences.getString("MY_TWITTER_ACCOUNT", ""));
+		// 自分のTwitterパスワード
+		EditText myTwitterPasswordEdit = (EditText) findViewById(R.id.my_twitter_password);
+		myTwitterPasswordEdit.setText(sharedPreferences.getString("MY_TWITTER_PASSWORD", ""));
+		// Replyを送るTwitterアカウント
+		EditText targetTwitterAccountEdit = (EditText) findViewById(R.id.target_twitter_account);
+		targetTwitterAccountEdit.setText(sharedPreferences.getString("TARGET_TWITTER_ACCOUNT", ""));
+		// Replyの内容
+		EditText replyTextEdit = (EditText) findViewById(R.id.reply_text);
+		replyTextEdit.setText(sharedPreferences.getString("REPLY_TEXT", ""));
+		// 末尾
+		EditText tailTextEdit = (EditText) findViewById(R.id.tail_text);
+		tailTextEdit.setText(sharedPreferences.getString("TAIL_TEXT", ""));
 	}
 
 	@Override
@@ -30,5 +54,33 @@ public class MainActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	/**
+	 * 設定ボタンタップ
+	 */
+	public void onClickSettings(View view) {
+		// 設定を保存する。
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		Editor editor = sharedPreferences.edit();
+
+		// 自分のTwitterアカウント
+		EditText myTwitterAccountEdit = (EditText) findViewById(R.id.my_twitter_account);
+		editor.putString("MY_TWITTER_ACCOUNT", myTwitterAccountEdit.getText().toString());
+		// 自分のTwitterパスワード
+		EditText myTwitterPasswordEdit = (EditText) findViewById(R.id.my_twitter_password);
+		editor.putString("MY_TWITTER_PASSWORD", myTwitterPasswordEdit.getText().toString());
+		// Replyを送るTwitterアカウント
+		EditText targetTwitterAccountEdit = (EditText) findViewById(R.id.target_twitter_account);
+		editor.putString("TARGET_TWITTER_ACCOUNT", targetTwitterAccountEdit.getText().toString());
+		// Replyの内容
+		EditText replyTextEdit = (EditText) findViewById(R.id.reply_text);
+		editor.putString("REPLY_TEXT", replyTextEdit.getText().toString());
+		// 末尾
+		EditText tailTextEdit = (EditText) findViewById(R.id.tail_text);
+		editor.putString("TAIL_TEXT", tailTextEdit.getText().toString());
+		
+		// コミット
+		editor.commit();
 	}
 }

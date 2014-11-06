@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="jp.headcubicle.oeebird.MainActivity" >
 
-    <!-- 自分のツイッターアカウント -->
+    <!-- 自分のTwitterアカウント -->
     <TextView 
         android:id="@+id/my_twitter_account_label"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
         android:layout_width="fill_parent"
         android:inputType="text"/>
 
-    <!-- 自分のツイッターパスワード -->
+    <!-- 自分のTwitterパスワード -->
     <TextView 
         android:id="@+id/my_twitter_password_label"
         android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
         android:layout_width="fill_parent"
         android:inputType="textPassword"/>
 
-    <!-- リプライを送るツイッターアカウント -->
+    <!-- Replyを送るTwitterアカウント -->
     <TextView 
         android:id="@+id/target_twitter_account_label"
         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
         android:layout_width="fill_parent"
         android:inputType="text"/>
     
-    <!-- リプライの内容 -->
+    <!-- Replyの内容 -->
     <TextView 
         android:id="@+id/reply_text_label"
         android:layout_height="wrap_content"
@@ -76,10 +76,11 @@
     
     <!-- 設定 -->
     <Button
-        android:id="@+id/button_setting"
+        android:id="@+id/button_settings"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_label_setting" />
+        android:text="@string/button_label_settings"
+        android:onClick="onClickSettings" />
 
     <!-- サービス起動 -->
     <Button
