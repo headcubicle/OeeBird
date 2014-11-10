@@ -1,10 +1,23 @@
 package jp.headcubicle.oeebird;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.concurrent.ExecutionException;
+
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,10 +25,41 @@ import android.widget.EditText;
 
 public class MainActivity extends Activity {
 
+	// OAuth認証用URI文字列
+	private String authenticationUriString = null;
+	
+	/**
+	 * OAuth認証用URI文字列を取得する。
+	 * @return OAuth認証用URI文字列
+	 */
+	public String getAuthenticationUriString() {
+		return authenticationUriString;
+	}
+
+	/**
+	 * OAuth認証用URI文字列を設定する。
+	 * @param authenticationUriString OAuth認証用URI文字列
+	 */
+	public void setAuthenticationUriString(String authenticationUriString) {
+		this.authenticationUriString = authenticationUriString;
+	}
+	
+	public void copyAuthenticationUriString(String authenticationUriString) {
+		this.authenticationUriString = new String(authenticationUriString);
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// 天才が仕事しないせい。ヒルズに帰れ。
+		try {
+			Class.forName("android.os.AsyncTask");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// 設定値を読み込む。
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -82,5 +126,70 @@ public class MainActivity extends Activity {
 		
 		// コミット
 		editor.commit();
+		
+		// OAuth認証
+		AuthenticationTask authenticationTask = new AuthenticationTask();
+		try {
+			authenticationUriString = authenticationTask.execute().get();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ExecutionException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		/*
+		while(null == authenticationUriString) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		*/
+		
+		// ブラウザ起動
+		Uri authenticationUri = Uri.parse(getAuthenticationUriString());
+		Intent intent = new Intent(Intent.ACTION_VIEW, authenticationUri);
+		startActivity(intent);
+	}
+	
+	/**
+	 * 起動ボタンをタップ
+	 */
+	public void onClickLaunch(View view) {
+		
+	}
+	
+	public class AuthenticationTask extends AsyncTask<Void, Void, String> {
+
+		@Override
+		protected String doInBackground(Void... params) {
+			Twitter twitter = TwitterFactory.getSingleton();
+			twitter.setOAuthConsumer("DmINyUJz1obXoLqutRjYw", "ztuiAa6urhBYdCSbZoZ08byrc0Z6SeKSTfiTpr47w");
+			RequestToken requestToken = null;
+
+			try {
+				requestToken = twitter.getOAuthRequestToken();
+			} catch (TwitterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			Log.d("doInBackground", requestToken.getAuthenticationURL());
+			
+			return requestToken.getAuthenticationURL();
+		}
+		
+		/*
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			MainActivity.this.copyAuthenticationUriString(result);
+			Log.d("onPostExecute", authenticationUriString);
+		}
+		*/
 	}
 }

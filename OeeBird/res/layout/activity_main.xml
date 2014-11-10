@@ -87,6 +87,7 @@
         android:id="@+id/button_run"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_label_run" />
+        android:text="@string/button_label_run"
+        android:onClick="onClickLaunch" />
 
 </LinearLayout>
