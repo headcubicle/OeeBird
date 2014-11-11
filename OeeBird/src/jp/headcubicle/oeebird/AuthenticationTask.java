@@ -16,10 +16,10 @@ import android.os.AsyncTask;
 /**
  * OAuth認証用タスク
  */
-public class AuthenticationTask extends AsyncTask<Void, Void, String> {
+public class AuthenticationTask extends AsyncTask<Void, Void, RequestToken> {
 
 	@Override
-	protected String doInBackground(Void... params) {
+	protected RequestToken doInBackground(Void... params) {
 		Twitter twitter = TwitterFactory.getSingleton();
 		twitter.setOAuthConsumer("DmINyUJz1obXoLqutRjYw", "ztuiAa6urhBYdCSbZoZ08byrc0Z6SeKSTfiTpr47w");
 		RequestToken requestToken = null;
@@ -31,6 +31,6 @@ public class AuthenticationTask extends AsyncTask<Void, Void, String> {
 			e.printStackTrace();
 		}
 
-		return requestToken.getAuthenticationURL();
+		return requestToken;
 	}
 }

@@ -1,6 +1,19 @@
 package jp.headcubicle.oeebird;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.util.concurrent.ExecutionException;
+
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,6 +27,7 @@ import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +36,13 @@ import android.widget.EditText;
 
 public class MainActivity extends Activity {
 
+	// リクエストトークン
+	private RequestToken requestToken = null;
+	// アクセストークン
+	private AccessToken accessToken = null;
+	// アプリケーション認証用PIN
+	private String pin = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,6 +74,26 @@ public class MainActivity extends Activity {
 		// 末尾
 		EditText tailTextEdit = (EditText) findViewById(R.id.tail_text);
 		tailTextEdit.setText(sharedPreferences.getString("TAIL_TEXT", ""));
+		
+		// アクセストークンを読み込む。
+		try {
+			FileInputStream fis = openFileInput("access_token.dat");
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			accessToken = (AccessToken) ois.readObject();
+			ois.close();
+		} catch (FileNotFoundException e) {
+			// ファイルが存在しない場合、アクセストークンをnullとする。
+			accessToken = null;
+		} catch (StreamCorruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -101,27 +142,28 @@ public class MainActivity extends Activity {
 		// コミット
 		editor.commit();
 		
-		// OAuth認証
-		AuthenticationTask authenticationTask = new AuthenticationTask();
-		String authenticationUriString = null;
-		try {
-			authenticationUriString = authenticationTask.execute().get();
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (ExecutionException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		// アクセストークンが保存されていない場合、OAuth認証を行う。
+		if(null == accessToken) {
+			AuthenticationTask authenticationTask = new AuthenticationTask();
+			try {
+				requestToken = authenticationTask.execute().get();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ExecutionException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			// ブラウザ起動
+			Uri authenticationUri = Uri.parse(requestToken.getAuthenticationURL());
+			Intent intent = new Intent(Intent.ACTION_VIEW, authenticationUri);
+			startActivity(intent);
+			
+			// PIN入力ダイアログを表示する。
+			DialogFragment dialogFragment = new PinDialogFragment();
+			dialogFragment.show(getFragmentManager(), "pin");
 		}
-		
-		// ブラウザ起動
-		Uri authenticationUri = Uri.parse(authenticationUriString);
-		Intent intent = new Intent(Intent.ACTION_VIEW, authenticationUri);
-		startActivity(intent);
-		
-		// PIN入力ダイアログを表示する。
-		DialogFragment dialogFragment = new PinDialogFragment();
-		dialogFragment.show(getFragmentManager(), "pin");
 	}
 	
 	/**
@@ -148,21 +190,97 @@ public class MainActivity extends Activity {
 			builder.setPositiveButton(R.string.button_label_pin_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
+					// PINを取得する。
+					EditText pinEdit = (EditText) PinDialogFragment.this.getView().findViewById(R.id.my_twitter_pin);
+					MainActivity main = (MainActivity) PinDialogFragment.this.getActivity();
+					String pin = pinEdit.getText().toString();
+				    Twitter twitter = TwitterFactory.getSingleton();
 					
+					// アクセストークンを取得する。
+					try {
+						if(pin.length() > 0) {
+							main.setAccessToken(twitter.getOAuthAccessToken(main.getRequestToken(), pin));
+						} else {
+							main.setAccessToken(twitter.getOAuthAccessToken());
+						}
+					} catch (TwitterException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					// アクセストークンを保存する。
+					try {
+						FileOutputStream fos = main.openFileOutput("access_token.dat", MODE_PRIVATE);
+						ObjectOutputStream oos = new ObjectOutputStream(fos);
+						oos.writeObject(main.getAccessToken());
+						oos.close();
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			});
 			
 			builder.setNegativeButton(R.string.button_label_pin_cancel, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-					
+					// 特に何もしない。
 				}
 			});
 			
 			return builder.create();
 		}
 		
+	}
+
+	/**
+	 * PINを取得する。
+	 * @return PIN
+	 */
+	public String getPin() {
+		return pin;
+	}
+
+	/**
+	 * PINを設定する。
+	 * @param pin
+	 */
+	public void setPin(String pin) {
+		this.pin = pin;
+	}
+
+	/**
+	 * リクエストトークンを取得する。
+	 * @return リクエストトークン
+	 */
+	public RequestToken getRequestToken() {
+		return requestToken;
+	}
+
+	/**
+	 * リクエストトークンを設定する。
+	 * @param requestToken リクエストトークン
+	 */
+	public void setRequestToken(RequestToken requestToken) {
+		this.requestToken = requestToken;
+	}
+
+	/**
+	 * アクセストークンを取得する。
+	 * @return アクセストークン
+	 */
+	public AccessToken getAccessToken() {
+		return accessToken;
+	}
+
+	/**
+	 * アクセストークンを設定する。
+	 * @param accessToken アクセストークン
+	 */
+	public void setAccessToken(AccessToken accessToken) {
+		this.accessToken = accessToken;
 	}
 }
