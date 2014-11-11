@@ -3,12 +3,18 @@ package jp.headcubicle.oeebird;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -112,12 +118,51 @@ public class MainActivity extends Activity {
 		Uri authenticationUri = Uri.parse(authenticationUriString);
 		Intent intent = new Intent(Intent.ACTION_VIEW, authenticationUri);
 		startActivity(intent);
+		
+		// PIN入力ダイアログを表示する。
+		DialogFragment dialogFragment = new PinDialogFragment();
+		dialogFragment.show(getFragmentManager(), "pin");
 	}
 	
 	/**
 	 * 起動ボタンをタップ
 	 */
 	public void onClickLaunch(View view) {
+		
+	}
+	
+	/**
+	 * PIN入力ダイアログ
+	 */
+	public static class PinDialogFragment extends DialogFragment {
+
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			
+			LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View content = inflater.inflate(R.layout.dialog_pin, null);
+			
+			builder.setTitle(R.string.label_my_twitter_pin);
+			builder.setView(content);
+			builder.setPositiveButton(R.string.button_label_pin_ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			
+			builder.setNegativeButton(R.string.button_label_pin_cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			
+			return builder.create();
+		}
 		
 	}
 }
