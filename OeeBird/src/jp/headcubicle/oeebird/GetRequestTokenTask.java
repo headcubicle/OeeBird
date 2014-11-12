@@ -14,9 +14,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 
 /**
- * OAuth認証用タスク
+ * リクエストトークン取得用タスク
  */
-public class AuthenticationTask extends AsyncTask<Void, Void, RequestToken> {
+public class GetRequestTokenTask extends AsyncTask<Void, Void, RequestToken> {
 
 	@Override
 	protected RequestToken doInBackground(Void... params) {

@@ -144,9 +144,9 @@ public class MainActivity extends Activity {
 		
 		// アクセストークンが保存されていない場合、OAuth認証を行う。
 		if(null == accessToken) {
-			AuthenticationTask authenticationTask = new AuthenticationTask();
+			GetRequestTokenTask getRequestTokenTask = new GetRequestTokenTask();
 			try {
-				requestToken = authenticationTask.execute().get();
+				requestToken = getRequestTokenTask.execute().get();
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -183,7 +183,7 @@ public class MainActivity extends Activity {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			
 			LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View content = inflater.inflate(R.layout.dialog_pin, null);
+			final View content = inflater.inflate(R.layout.dialog_pin, null);
 			
 			builder.setTitle(R.string.label_my_twitter_pin);
 			builder.setView(content);
@@ -191,21 +191,21 @@ public class MainActivity extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// PINを取得する。
-					EditText pinEdit = (EditText) PinDialogFragment.this.getView().findViewById(R.id.my_twitter_pin);
+					EditText pinEdit = (EditText) content.findViewById(R.id.my_twitter_pin);
+					//EditText pinEdit = (EditText) PinDialogFragment.this.getView().findViewById(R.id.my_twitter_pin);
 					MainActivity main = (MainActivity) PinDialogFragment.this.getActivity();
 					String pin = pinEdit.getText().toString();
-				    Twitter twitter = TwitterFactory.getSingleton();
 					
 					// アクセストークンを取得する。
-					try {
-						if(pin.length() > 0) {
-							main.setAccessToken(twitter.getOAuthAccessToken(main.getRequestToken(), pin));
-						} else {
-							main.setAccessToken(twitter.getOAuthAccessToken());
-						}
-					} catch (TwitterException e) {
+				    GetAccessTokenTask getAccessTokenTask = new GetAccessTokenTask(main.getRequestToken(), pin);
+				    try {
+						main.setAccessToken(getAccessTokenTask.execute().get());
+					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						e1.printStackTrace();
+					} catch (ExecutionException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
 					
 					// アクセストークンを保存する。
