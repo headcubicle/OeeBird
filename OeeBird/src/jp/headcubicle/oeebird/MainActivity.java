@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -36,12 +37,18 @@ import android.widget.EditText;
 
 public class MainActivity extends Activity {
 
-	// リクエストトークン
+	/** リクエストトークン */
 	private RequestToken requestToken = null;
-	// アクセストークン
+	/** アクセストークン */
 	private AccessToken accessToken = null;
-	// アプリケーション認証用PIN
+	/** アプリケーション認証用PIN */
 	private String pin = null;
+	/** Replyを送るTwitterアカウント */
+	private String targetTwitterAccount = null;
+	/** replyの内容 */
+	private String replyText = null;
+	/** 末尾 */
+	private String tailText = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +74,16 @@ public class MainActivity extends Activity {
 		myTwitterPasswordEdit.setText(sharedPreferences.getString("MY_TWITTER_PASSWORD", ""));
 		// Replyを送るTwitterアカウント
 		EditText targetTwitterAccountEdit = (EditText) findViewById(R.id.target_twitter_account);
-		targetTwitterAccountEdit.setText(sharedPreferences.getString("TARGET_TWITTER_ACCOUNT", ""));
+		targetTwitterAccount = sharedPreferences.getString("TARGET_TWITTER_ACCOUNT", "");
+		targetTwitterAccountEdit.setText(targetTwitterAccount);
 		// Replyの内容
 		EditText replyTextEdit = (EditText) findViewById(R.id.reply_text);
-		replyTextEdit.setText(sharedPreferences.getString("REPLY_TEXT", ""));
+		replyText = sharedPreferences.getString("REPLY_TEXT", "");
+		replyTextEdit.setText(replyText);
 		// 末尾
 		EditText tailTextEdit = (EditText) findViewById(R.id.tail_text);
-		tailTextEdit.setText(sharedPreferences.getString("TAIL_TEXT", ""));
+		tailText = sharedPreferences.getString("TAIL_TEXT", "");
+		tailTextEdit.setText(tailText);
 		
 		// アクセストークンを読み込む。
 		try {
@@ -93,6 +103,13 @@ public class MainActivity extends Activity {
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		// アクセストークンがある場合、Twitterインスタンスに設定する。
+		if (null != accessToken) {
+			Twitter twitter = TwitterFactory.getSingleton();
+			twitter.setOAuthConsumer("DmINyUJz1obXoLqutRjYw", "ztuiAa6urhBYdCSbZoZ08byrc0Z6SeKSTfiTpr47w");
+			twitter.setOAuthAccessToken(accessToken);
 		}
 	}
 
@@ -169,8 +186,9 @@ public class MainActivity extends Activity {
 	/**
 	 * 起動ボタンをタップ
 	 */
-	public void onClickLaunch(View view) {
-		
+	public void onClickLaunch(View view) throws TwitterException {
+		TweetTestTask testTask = new TweetTestTask();
+		testTask.execute("@" + targetTwitterAccount + " " + replyText + tailText);
 	}
 	
 	/**
@@ -282,5 +300,26 @@ public class MainActivity extends Activity {
 	 */
 	public void setAccessToken(AccessToken accessToken) {
 		this.accessToken = accessToken;
+	}
+	
+	/**
+	 * Tweet用タスク
+	 */
+	public class TweetTestTask extends AsyncTask<String, Void, Void> {
+
+		@Override
+		protected Void doInBackground(String... params) {
+			Twitter twitter = TwitterFactory.getSingleton();
+
+			try {
+				twitter.updateStatus(params[0]);
+			} catch (TwitterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return null;
+		}
+		
 	}
 }

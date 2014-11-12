@@ -10,12 +10,12 @@ import android.os.AsyncTask;
 /**
  * アクセストークン取得用タスク
  */
-public class GetAccessTokenTask  extends AsyncTask<Void, Void, AccessToken> {
+public class GetAccessTokenTask extends AsyncTask<Void, Void, AccessToken> {
 
-	// リクエストトークン
+	/** リクエストトークン */
 	private RequestToken requestToken = null;
 	
-	// PIN
+	/** PIN */
 	private String pin = null;
 	
 	public GetAccessTokenTask(RequestToken requestToken, String pin) {
