@@ -20,6 +20,8 @@ public class TweetService extends Service {
 	private String replyText = null;
 	/** 末尾 */
 	private String tailText = null;
+	/** Tweet用非同期タスク */
+	private TweetTask tweetTask = new TweetTask();
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -38,8 +40,7 @@ public class TweetService extends Service {
 		replyText = intent.getStringExtra("jp.headcubicle.oeebird.intent.replyText");
 		tailText = intent.getStringExtra("jp.headcubicle.oeebird.intent.tailText");
 
-		TweetTask tweetTask = new TweetTask();
-		tweetTask.execute("@" + targetTwitterAccount + " " + replyText + tailText);
+		tweetTask.execute(targetTwitterAccount, replyText, tailText);
 		
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -50,6 +51,10 @@ public class TweetService extends Service {
 	@Override
 	public void onDestroy() {
 		Log.d("TweetService", "onDestroy");
+		
+		// Tweet用非同期タスクを停止
+		tweetTask.cancel(true);
+		
 		super.onDestroy();
 	}
 	
@@ -62,11 +67,22 @@ public class TweetService extends Service {
 		protected Void doInBackground(String... params) {
 			Twitter twitter = TwitterFactory.getSingleton();
 
-			try {
-				twitter.updateStatus(params[0]);
-			} catch (TwitterException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			String tweetText = params[1] + params[2];
+			
+			while(!isCancelled()) {
+				try {
+					Log.d("doInBackground", tweetText);
+					twitter.updateStatus(tweetText);
+					// 30秒待機する。
+					Thread.sleep(30000);
+					tweetText += params[2];
+				} catch (TwitterException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 			return null;
