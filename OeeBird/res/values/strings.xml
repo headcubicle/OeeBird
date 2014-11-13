@@ -11,8 +11,9 @@
     <string name="label_target_twitter_account">Replyを送るTwitterアカウント</string>
     <string name="label_reply_text">Replyの内容</string>
     <string name="label_tail_text">末尾</string>
-    <string name="button_label_run">起動</string>
     <string name="button_label_settings">設定</string>
+    <string name="button_label_launch">起動</string>
+    <string name="button_label_stop">停止</string>
     
     <!-- PinDialog -->
     <string name="label_my_twitter_pin">PINを入力してください。</string>

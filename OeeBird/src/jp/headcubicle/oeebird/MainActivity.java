@@ -187,8 +187,20 @@ public class MainActivity extends Activity {
 	 * 起動ボタンをタップ
 	 */
 	public void onClickLaunch(View view) throws TwitterException {
-		TweetTestTask testTask = new TweetTestTask();
-		testTask.execute("@" + targetTwitterAccount + " " + replyText + tailText);
+		// サービス起動
+		LaunchTweetServiceTask launchTask = new LaunchTweetServiceTask(this,
+																	targetTwitterAccount,
+																	replyText,
+																	tailText);
+		launchTask.execute();
+	}
+	
+	/**
+	 * 停止ボタンをタップ
+	 */
+	public void onClickStop(View view) {
+		// サービス停止
+		stopService(new Intent(MainActivity.this, TweetService.class));
 	}
 	
 	/**
@@ -300,26 +312,5 @@ public class MainActivity extends Activity {
 	 */
 	public void setAccessToken(AccessToken accessToken) {
 		this.accessToken = accessToken;
-	}
-	
-	/**
-	 * Tweet用タスク
-	 */
-	public class TweetTestTask extends AsyncTask<String, Void, Void> {
-
-		@Override
-		protected Void doInBackground(String... params) {
-			Twitter twitter = TwitterFactory.getSingleton();
-
-			try {
-				twitter.updateStatus(params[0]);
-			} catch (TwitterException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			return null;
-		}
-		
 	}
 }

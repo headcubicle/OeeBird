@@ -84,10 +84,18 @@
 
     <!-- サービス起動 -->
     <Button
-        android:id="@+id/button_run"
+        android:id="@+id/button_launch"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_label_run"
+        android:text="@string/button_label_launch"
         android:onClick="onClickLaunch" />
 
+    <!-- サービス停止 -->
+    <Button
+        android:id="@+id/button_stop"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_label_stop"
+        android:onClick="onClickStop" />
+    
 </LinearLayout>
