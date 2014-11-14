@@ -5,14 +5,6 @@
     android:orientation="vertical" >
     
     <!-- PIN -->
-    <!--
-    <TextView 
-        android:id="@+id/my_twitter_account_label"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="@string/label_my_twitter_pin"
-        />
-    -->
     <EditText 
         android:id="@+id/my_twitter_pin"
        	android:layout_height="wrap_content"

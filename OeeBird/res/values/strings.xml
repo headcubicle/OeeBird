@@ -6,9 +6,8 @@
     <string name="action_settings">Settings</string>
     
     <!-- MainActivity -->
-    <string name="label_my_twitter_account">自分のTwitterアカウント</string>
-    <string name="label_my_twitter_password">自分のTwitterパスワード</string>
-    <string name="label_target_twitter_account">Replyを送るTwitterアカウント</string>
+    <string name="label_target_twitter_user">Replyを送るTwitterユーザ</string>
+    <string name="label_target_tweet_keyword">Replyを送るTweetに含まれるキーワード</string>
     <string name="label_reply_text">Replyの内容</string>
     <string name="label_tail_text">末尾</string>
     <string name="button_label_settings">設定</string>

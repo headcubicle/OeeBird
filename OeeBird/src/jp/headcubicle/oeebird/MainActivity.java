@@ -25,10 +25,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,8 +41,10 @@ public class MainActivity extends Activity {
 	private AccessToken accessToken = null;
 	/** アプリケーション認証用PIN */
 	private String pin = null;
-	/** Replyを送るTwitterアカウント */
-	private String targetTwitterAccount = null;
+	/** Replyを送るTwitterユーザ */
+	private String targetTwitterUser = null;
+	/** Replyを送るTweetに含まれるキーワード */
+	private String targetTweetKeyword = null;
 	/** replyの内容 */
 	private String replyText = null;
 	/** 末尾 */
@@ -66,16 +66,14 @@ public class MainActivity extends Activity {
 		// 設定値を読み込む。
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		// 自分のTwitterアカウント
-		EditText myTwitterAccountEdit = (EditText) findViewById(R.id.my_twitter_account);
-		myTwitterAccountEdit.setText(sharedPreferences.getString("MY_TWITTER_ACCOUNT", ""));
-		// 自分のTwitterパスワード
-		EditText myTwitterPasswordEdit = (EditText) findViewById(R.id.my_twitter_password);
-		myTwitterPasswordEdit.setText(sharedPreferences.getString("MY_TWITTER_PASSWORD", ""));
-		// Replyを送るTwitterアカウント
-		EditText targetTwitterAccountEdit = (EditText) findViewById(R.id.target_twitter_account);
-		targetTwitterAccount = sharedPreferences.getString("TARGET_TWITTER_ACCOUNT", "");
-		targetTwitterAccountEdit.setText(targetTwitterAccount);
+		// Replyを送るTwitterユーザ
+		EditText targetTwitterUserEdit = (EditText) findViewById(R.id.target_twitter_user);
+		targetTwitterUser = sharedPreferences.getString("TARGET_TWITTER_USER", "");
+		targetTwitterUserEdit.setText(targetTwitterUser);
+		// Replyを送るTweetに含まれるキーワード
+		EditText targetTweetKeywordEdit = (EditText) findViewById(R.id.target_tweet_keyword);
+		targetTweetKeyword = sharedPreferences.getString("TARGET_TWEET_KEYWORD", "");
+		targetTweetKeywordEdit.setText(targetTweetKeyword);
 		// Replyの内容
 		EditText replyTextEdit = (EditText) findViewById(R.id.reply_text);
 		replyText = sharedPreferences.getString("REPLY_TEXT", "");
@@ -140,15 +138,12 @@ public class MainActivity extends Activity {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		Editor editor = sharedPreferences.edit();
 
-		// 自分のTwitterアカウント
-		EditText myTwitterAccountEdit = (EditText) findViewById(R.id.my_twitter_account);
-		editor.putString("MY_TWITTER_ACCOUNT", myTwitterAccountEdit.getText().toString());
-		// 自分のTwitterパスワード
-		EditText myTwitterPasswordEdit = (EditText) findViewById(R.id.my_twitter_password);
-		editor.putString("MY_TWITTER_PASSWORD", myTwitterPasswordEdit.getText().toString());
-		// Replyを送るTwitterアカウント
-		EditText targetTwitterAccountEdit = (EditText) findViewById(R.id.target_twitter_account);
-		editor.putString("TARGET_TWITTER_ACCOUNT", targetTwitterAccountEdit.getText().toString());
+		// Replyを送るTwitterユーザ
+		EditText targetTwitterUserEdit = (EditText) findViewById(R.id.target_twitter_user);
+		editor.putString("TARGET_TWITTER_USER", targetTwitterUserEdit.getText().toString());
+		// Replyを送るTweetに含まれるキーワード
+		EditText targetTweetKeywordEdit = (EditText) findViewById(R.id.target_tweet_keyword);
+		editor.putString("TARGET_TWEET_KEYWORD", targetTweetKeywordEdit.getText().toString());
 		// Replyの内容
 		EditText replyTextEdit = (EditText) findViewById(R.id.reply_text);
 		editor.putString("REPLY_TEXT", replyTextEdit.getText().toString());
@@ -189,7 +184,8 @@ public class MainActivity extends Activity {
 	public void onClickLaunch(View view) throws TwitterException {
 		// サービス起動
 		LaunchTweetServiceTask launchTask = new LaunchTweetServiceTask(this,
-																	targetTwitterAccount,
+																	targetTwitterUser,
+																	targetTweetKeyword,
 																	replyText,
 																	tailText);
 		launchTask.execute();

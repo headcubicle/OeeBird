@@ -9,41 +9,28 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="jp.headcubicle.oeebird.MainActivity" >
 
-    <!-- 自分のTwitterアカウント -->
+    <!-- Replyを送るTwitterユーザ -->
     <TextView 
-        android:id="@+id/my_twitter_account_label"
+        android:id="@+id/target_twitter_user_label"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="@string/label_my_twitter_account"
+        android:text="@string/label_target_twitter_user"
         />
     <EditText 
-        android:id="@+id/my_twitter_account"
+        android:id="@+id/target_twitter_user"
        	android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:inputType="text"/>
-
-    <!-- 自分のTwitterパスワード -->
+    
+    <!-- Replyを送るTwitterに含まれるキーワード -->
     <TextView 
-        android:id="@+id/my_twitter_password_label"
+        android:id="@+id/target_tweet_keyword_label"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="@string/label_my_twitter_password"
+        android:text="@string/label_target_tweet_keyword"
         />
     <EditText 
-        android:id="@+id/my_twitter_password"
-       	android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:inputType="textPassword"/>
-
-    <!-- Replyを送るTwitterアカウント -->
-    <TextView 
-        android:id="@+id/target_twitter_account_label"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="@string/label_target_twitter_account"
-        />
-    <EditText 
-        android:id="@+id/target_twitter_account"
+        android:id="@+id/target_tweet_keyword"
        	android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:inputType="text"/>
