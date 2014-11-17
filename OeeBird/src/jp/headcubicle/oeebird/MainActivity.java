@@ -68,24 +68,24 @@ public class MainActivity extends Activity {
 		
 		// Replyを送るTwitterユーザ
 		EditText targetTwitterUserEdit = (EditText) findViewById(R.id.target_twitter_user);
-		targetTwitterUser = sharedPreferences.getString("TARGET_TWITTER_USER", "");
+		targetTwitterUser = sharedPreferences.getString(OeeBirdResource.targetTwitterUser, "");
 		targetTwitterUserEdit.setText(targetTwitterUser);
 		// Replyを送るTweetに含まれるキーワード
 		EditText targetTweetKeywordEdit = (EditText) findViewById(R.id.target_tweet_keyword);
-		targetTweetKeyword = sharedPreferences.getString("TARGET_TWEET_KEYWORD", "");
+		targetTweetKeyword = sharedPreferences.getString(OeeBirdResource.targetTweetKeyword, "");
 		targetTweetKeywordEdit.setText(targetTweetKeyword);
 		// Replyの内容
 		EditText replyTextEdit = (EditText) findViewById(R.id.reply_text);
-		replyText = sharedPreferences.getString("REPLY_TEXT", "");
+		replyText = sharedPreferences.getString(OeeBirdResource.replyText, "");
 		replyTextEdit.setText(replyText);
 		// 末尾
 		EditText tailTextEdit = (EditText) findViewById(R.id.tail_text);
-		tailText = sharedPreferences.getString("TAIL_TEXT", "");
+		tailText = sharedPreferences.getString(OeeBirdResource.tailText, "");
 		tailTextEdit.setText(tailText);
 		
 		// アクセストークンを読み込む。
 		try {
-			FileInputStream fis = openFileInput("access_token.dat");
+			FileInputStream fis = openFileInput(OeeBirdResource.accessTokenFileName);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			accessToken = (AccessToken) ois.readObject();
 			ois.close();
@@ -106,7 +106,7 @@ public class MainActivity extends Activity {
 		// アクセストークンがある場合、Twitterインスタンスに設定する。
 		if (null != accessToken) {
 			Twitter twitter = TwitterFactory.getSingleton();
-			twitter.setOAuthConsumer("DmINyUJz1obXoLqutRjYw", "ztuiAa6urhBYdCSbZoZ08byrc0Z6SeKSTfiTpr47w");
+			twitter.setOAuthConsumer(OeeBirdResource.consumerKey, OeeBirdResource.consumerSecret);
 			twitter.setOAuthAccessToken(accessToken);
 		}
 	}
@@ -140,16 +140,16 @@ public class MainActivity extends Activity {
 
 		// Replyを送るTwitterユーザ
 		EditText targetTwitterUserEdit = (EditText) findViewById(R.id.target_twitter_user);
-		editor.putString("TARGET_TWITTER_USER", targetTwitterUserEdit.getText().toString());
+		editor.putString(OeeBirdResource.targetTwitterUser, targetTwitterUserEdit.getText().toString());
 		// Replyを送るTweetに含まれるキーワード
 		EditText targetTweetKeywordEdit = (EditText) findViewById(R.id.target_tweet_keyword);
-		editor.putString("TARGET_TWEET_KEYWORD", targetTweetKeywordEdit.getText().toString());
+		editor.putString(OeeBirdResource.targetTweetKeyword, targetTweetKeywordEdit.getText().toString());
 		// Replyの内容
 		EditText replyTextEdit = (EditText) findViewById(R.id.reply_text);
-		editor.putString("REPLY_TEXT", replyTextEdit.getText().toString());
+		editor.putString(OeeBirdResource.replyText, replyTextEdit.getText().toString());
 		// 末尾
 		EditText tailTextEdit = (EditText) findViewById(R.id.tail_text);
-		editor.putString("TAIL_TEXT", tailTextEdit.getText().toString());
+		editor.putString(OeeBirdResource.tailText, tailTextEdit.getText().toString());
 		
 		// コミット
 		editor.commit();
@@ -218,7 +218,6 @@ public class MainActivity extends Activity {
 				public void onClick(DialogInterface dialog, int which) {
 					// PINを取得する。
 					EditText pinEdit = (EditText) content.findViewById(R.id.my_twitter_pin);
-					//EditText pinEdit = (EditText) PinDialogFragment.this.getView().findViewById(R.id.my_twitter_pin);
 					MainActivity main = (MainActivity) PinDialogFragment.this.getActivity();
 					String pin = pinEdit.getText().toString();
 					
@@ -236,7 +235,7 @@ public class MainActivity extends Activity {
 					
 					// アクセストークンを保存する。
 					try {
-						FileOutputStream fos = main.openFileOutput("access_token.dat", MODE_PRIVATE);
+						FileOutputStream fos = main.openFileOutput(OeeBirdResource.accessTokenFileName, MODE_PRIVATE);
 						ObjectOutputStream oos = new ObjectOutputStream(fos);
 						oos.writeObject(main.getAccessToken());
 						oos.close();

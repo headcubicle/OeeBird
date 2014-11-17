@@ -187,18 +187,18 @@ public class TweetService extends Service {
 		Log.d("TweetService", "onStartCommand");
 		
 		// Reply送信先ユーザ
-		targetTwitterUser = intent.getStringExtra("jp.headcubicle.oeebird.intent.targetTwitterUser");
+		targetTwitterUser = intent.getStringExtra(OeeBirdResource.extraTargetTwitterUser);
 		// Reply送信先Tweetに含まれるキーワード
-		targetTweetKeyword = intent.getStringExtra("jp.headcubicle.oeebird.intent.targetTweetKeyword");
+		targetTweetKeyword = intent.getStringExtra(OeeBirdResource.extraTargetTweetKeyword);
 		// Relpy内容
-		replyText = intent.getStringExtra("jp.headcubicle.oeebird.intent.replyText");
+		replyText = intent.getStringExtra(OeeBirdResource.extraReplyText);
 		// 末尾
-		tailText = intent.getStringExtra("jp.headcubicle.oeebird.intent.tailText");
+		tailText = intent.getStringExtra(OeeBirdResource.extraTailText);
 		// アクセストークン
-		accessToken = (AccessToken) intent.getSerializableExtra("jp.headcubicle.oeebird.intent.accessToken");
+		accessToken = (AccessToken) intent.getSerializableExtra(OeeBirdResource.extraAccessToken);
 		
-		Configuration configuration = new ConfigurationBuilder().setOAuthConsumerKey("DmINyUJz1obXoLqutRjYw")
-																.setOAuthConsumerSecret("ztuiAa6urhBYdCSbZoZ08byrc0Z6SeKSTfiTpr47w")
+		Configuration configuration = new ConfigurationBuilder().setOAuthConsumerKey(OeeBirdResource.consumerKey)
+																.setOAuthConsumerSecret(OeeBirdResource.consumerSecret)
 																.build();
 
 		twitterStream = new TwitterStreamFactory(configuration).getInstance();

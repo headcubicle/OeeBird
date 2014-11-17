@@ -14,7 +14,7 @@ public class GetRequestTokenTask extends AsyncTask<Void, Void, RequestToken> {
 	@Override
 	protected RequestToken doInBackground(Void... params) {
 		Twitter twitter = TwitterFactory.getSingleton();
-		twitter.setOAuthConsumer("DmINyUJz1obXoLqutRjYw", "ztuiAa6urhBYdCSbZoZ08byrc0Z6SeKSTfiTpr47w");
+		twitter.setOAuthConsumer(OeeBirdResource.consumerKey, OeeBirdResource.consumerSecret);
 		RequestToken requestToken = null;
 
 		try {

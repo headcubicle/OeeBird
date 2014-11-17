@@ -44,12 +44,11 @@ public class LaunchTweetServiceTask extends AsyncTask<Void, Void, Void> {
 	protected Void doInBackground(Void... params) {
 		// サービス起動
 		Intent intent = new Intent(mainActivity, TweetService.class);
-		intent.putExtra("jp.headcubicle.oeebird.intent.targetTwitterUser", targetTwitterUser);
-		intent.putExtra("jp.headcubicle.oeebird.intent.targetTweetKeyword", targetTweetKeyword);
-		intent.putExtra("jp.headcubicle.oeebird.intent.replyText", replyText);
-		intent.putExtra("jp.headcubicle.oeebird.intent.tailText", tailText);
-		intent.putExtra("jp.headcubicle.oeebird.intent.accessToken", mainActivity.getAccessToken());
-		Log.d("doInBackground", "@" + targetTwitterUser + " " + replyText + tailText);
+		intent.putExtra(OeeBirdResource.extraTargetTwitterUser, targetTwitterUser);
+		intent.putExtra(OeeBirdResource.extraTargetTweetKeyword, targetTweetKeyword);
+		intent.putExtra(OeeBirdResource.extraReplyText, replyText);
+		intent.putExtra(OeeBirdResource.extraTailText, tailText);
+		intent.putExtra(OeeBirdResource.extraAccessToken, mainActivity.getAccessToken());
 		mainActivity.startService(intent);
 
 		return null;
