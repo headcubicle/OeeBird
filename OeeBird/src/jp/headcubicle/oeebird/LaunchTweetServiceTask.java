@@ -2,7 +2,6 @@ package jp.headcubicle.oeebird;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 
 /**
  * Tweetサービス起動用タスク

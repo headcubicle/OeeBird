@@ -4,6 +4,15 @@ package jp.headcubicle.oeebird;
  * 定数クラス
  */
 public class OeeBirdResource {
+	
+	/**
+	 * コンストラクタ
+	 * インスタンスの生成を禁止する。
+	 */
+	private OeeBirdResource() {
+		throw new AssertionError();
+	}
+	
 	/** SharedPreferences: Replyを送るTwitterユーザ */
 	public static String targetTwitterUser = "TARGET_TWITTER_USER";
 	/** SharedPreferences: Replyを送るTweetに含まれるキーワード */

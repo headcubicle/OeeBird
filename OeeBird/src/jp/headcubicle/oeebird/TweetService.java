@@ -1,11 +1,9 @@
 package jp.headcubicle.oeebird;
 
 import twitter4j.DirectMessage;
-import twitter4j.Query;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
-import twitter4j.StatusListener;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -19,7 +17,6 @@ import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import android.app.Service;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 
