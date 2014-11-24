@@ -6,7 +6,6 @@ import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.User;
@@ -64,12 +63,17 @@ public class TweetService extends Service {
             // 対象ユーザが特定のTweetをした場合にReplyを送る。
             if(status.getUser().getName().equals(targetTwitterUser)) {
                 if(status.getText().contains(targetTweetKeyword)) {
-//                    Twitter twitter = TwitterFactory.getSingleton();
-                    replyText += tailText;
-                    try {
-                        twitter.updateStatus("@" + targetTwitterUser + " " + replyText);
-                    } catch (TwitterException e) {
-                        e.printStackTrace();
+                    for(Status result = null; result == null;) {
+                        replyText += tailText;
+                        try {
+                            result = twitter.updateStatus("@" + targetTwitterUser + " " + replyText);
+                        } catch (TwitterException e) {
+                            e.printStackTrace();
+                            // Tweet重複の場合のみ再送する。
+                            if(e.getErrorCode() != 187) {
+                                break;
+                            }
+                        }
                     }
                 }
             }

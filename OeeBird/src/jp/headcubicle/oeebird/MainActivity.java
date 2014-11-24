@@ -118,9 +118,6 @@ public class MainActivity extends Activity {
         
         // アクセストークンがある場合、Twitterインスタンスに設定する。
         if (null != accessToken) {
-//            Twitter twitter = TwitterFactory.getSingleton();
-//            twitter.setOAuthConsumer(OeeBirdResource.consumerKey, OeeBirdResource.consumerSecret);
-//            twitter.setOAuthAccessToken(accessToken);
             twitter.setOAuthAccessToken(accessToken);
         }
     }
@@ -170,7 +167,7 @@ public class MainActivity extends Activity {
         
         // アクセストークンが保存されていない場合、OAuth認証を行う。
         if(null == accessToken) {
-            GetRequestTokenTask getRequestTokenTask = new GetRequestTokenTask(this, twitter);
+            GetRequestTokenTask getRequestTokenTask = new GetRequestTokenTask(twitter);
             GetRequestTokenResult result = null;
             
             if(null == requestToken) {
@@ -246,7 +243,7 @@ public class MainActivity extends Activity {
                     
                     // アクセストークンを取得する。
                     if(!pin.isEmpty()) {
-                        GetAccessTokenTask getAccessTokenTask = new GetAccessTokenTask(main, main.getTwitter(), main.getRequestToken(), pin);
+                        GetAccessTokenTask getAccessTokenTask = new GetAccessTokenTask(main.getTwitter(), main.getRequestToken(), pin);
                         try {
                             GetAccessTokenResult result = getAccessTokenTask.execute().get();
                             if(result.getAccessToken() != null) {

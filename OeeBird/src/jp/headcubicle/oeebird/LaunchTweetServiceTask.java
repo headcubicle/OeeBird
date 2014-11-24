@@ -1,6 +1,5 @@
 package jp.headcubicle.oeebird;
 
-import twitter4j.Twitter;
 import android.content.Intent;
 import android.os.AsyncTask;
 
