@@ -18,7 +18,7 @@
         />
     <EditText 
         android:id="@+id/target_twitter_user"
-       	android:layout_height="wrap_content"
+           android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:inputType="text"/>
     
@@ -31,7 +31,7 @@
         />
     <EditText 
         android:id="@+id/target_tweet_keyword"
-       	android:layout_height="wrap_content"
+           android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:inputType="text"/>
     
@@ -44,7 +44,7 @@
         />
     <EditText 
         android:id="@+id/reply_text"
-       	android:layout_height="wrap_content"
+           android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:inputType="text"/>
     
@@ -57,7 +57,7 @@
         />
     <EditText 
         android:id="@+id/tail_text"
-       	android:layout_height="wrap_content"
+           android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:inputType="text"/>
     

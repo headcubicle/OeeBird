@@ -7,7 +7,7 @@
     <!-- PIN -->
     <EditText 
         android:id="@+id/my_twitter_pin"
-       	android:layout_height="wrap_content"
+           android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:inputType="numberPassword"/>
 

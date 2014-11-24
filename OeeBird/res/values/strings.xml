@@ -19,4 +19,12 @@
     <string name="button_label_pin_ok">OK</string>
     <string name="button_label_pin_cancel">キャンセル</string>
     
+    <!-- エラーメッセージ -->
+    <string name="error_stream_corrupted_exception">ファイルストリームの読み込みに失敗しました。</string>
+    <string name="error_io_exception">ファイルアクセスに失敗しました。</string>
+    <string name="error_class_not_found_exception">アクセストークンが復元できません。</string>
+    <string name="error_file_not_found_exception">アクセストークンファイルがありません。</string>
+    <string name="error_get_request_token_failed">リクエストトークンの取得に失敗しました。ステータスコード: </string>
+    <string name="error_get_access_token_failed">アクセストークンの取得に失敗しました。ステータスコード: </string>
+    
 </resources>
