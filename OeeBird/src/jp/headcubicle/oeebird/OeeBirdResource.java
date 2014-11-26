@@ -43,4 +43,7 @@ public class OeeBirdResource {
     public static String extraTwitter = "jp.headcubicle.oeebird.intent.twitter";
     /** IntentExtra: アクセストークン */
     public static String extraAccessToken = "jp.headcubicle.oeebird.intent.accessToken";
+    
+    /** Notification ID: サービス起動 */
+    public static int idServiceLaunch = 1;
 }

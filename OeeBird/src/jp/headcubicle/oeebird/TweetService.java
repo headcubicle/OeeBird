@@ -14,9 +14,12 @@ import twitter4j.UserStreamListener;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 /**
@@ -188,6 +191,16 @@ public class TweetService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("TweetService", "onStartCommand");
         
+        // ステータスバーに通知を表示する。
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                                                    .setSmallIcon(R.drawable.ic_launcher)
+                                                    .setContentTitle(getString(R.string.notification_title_service_launch))
+                                                    .setContentText(getString(R.string.notification_text_service_launch));
+
+        notificationManager.notify(OeeBirdResource.idServiceLaunch, builder.build());
+        
         // Reply送信先ユーザ
         targetTwitterUser = intent.getStringExtra(OeeBirdResource.extraTargetTwitterUser);
         // Reply送信先Tweetに含まれるキーワード
@@ -223,6 +236,10 @@ public class TweetService extends Service {
         
         // Streamの読み込みを停止する。
         twitterStream.shutdown();
+        
+        // ステータスバーの通知を消去する。
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(OeeBirdResource.idServiceLaunch);
         
         super.onDestroy();
     }

@@ -27,4 +27,8 @@
     <string name="error_get_request_token_failed">リクエストトークンの取得に失敗しました。ステータスコード: </string>
     <string name="error_get_access_token_failed">アクセストークンの取得に失敗しました。ステータスコード: </string>
     
+    <!-- 通知メッセージ -->
+    <string name="notification_title_service_launch">日本オエー鳥の会活動中</string>
+    <string name="notification_text_service_launch">日本オエー鳥の会が活動しています。</string>
+    
 </resources>
