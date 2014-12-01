@@ -15,11 +15,13 @@ import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 /**
@@ -191,14 +193,21 @@ public class TweetService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("TweetService", "onStartCommand");
         
-        // ステータスバーに通知を表示する。
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        
+        // ステータスバーに通知を表示する。        
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                                                     .setSmallIcon(R.drawable.ic_launcher)
                                                     .setContentTitle(getString(R.string.notification_title_service_launch))
                                                     .setContentText(getString(R.string.notification_text_service_launch));
 
+        // 通知タップ時にアプリを起動するためのIntentを用意する。
+        Intent mainIntent = new Intent(this, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(mainIntent);
+        PendingIntent mainPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(mainPendingIntent);
+        
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(OeeBirdResource.idServiceLaunch, builder.build());
         
         // Reply送信先ユーザ
