@@ -33,6 +33,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -54,6 +55,9 @@ public class MainActivity extends Activity {
     private String replyText = null;
     /** 末尾 */
     private String tailText = null;
+    
+    /** サービス起動ボタン */
+    private Button launchButton = null;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,9 @@ public class MainActivity extends Activity {
         tailText = sharedPreferences.getString(OeeBirdResource.tailText, "");
         tailTextEdit.setText(tailText);
         
+        // サービス起動ボタン
+        launchButton = (Button) findViewById(R.id.button_launch);
+        
         // Twitterインスタンスを生成する。
         ConfigurationBuilder builder = new ConfigurationBuilder();
         builder.setOAuthConsumerKey(OeeBirdResource.consumerKey);
@@ -105,6 +112,8 @@ public class MainActivity extends Activity {
         } catch (FileNotFoundException e) {
             // ファイルが存在しない場合、アクセストークンをnullとする。
             accessToken = null;
+            // サービス起動ボタンを無効とする。
+            launchButton.setEnabled(false);
         } catch (StreamCorruptedException e) {
             Toast.makeText(this, R.string.error_stream_corrupted_exception, Toast.LENGTH_LONG).show();
             e.printStackTrace();
@@ -209,6 +218,9 @@ public class MainActivity extends Activity {
                                                                     replyText,
                                                                     tailText);
         launchTask.execute();
+        
+        // サービス起動ボタンを無効にする。
+        launchButton.setEnabled(false);
     }
     
     /**
@@ -217,6 +229,8 @@ public class MainActivity extends Activity {
     public void onClickStop(View view) {
         // サービス停止
         stopService(new Intent(MainActivity.this, TweetService.class));
+        // サービス起動ボタンを有効にする。
+        launchButton.setEnabled(true);
     }
     
     /**
@@ -248,6 +262,8 @@ public class MainActivity extends Activity {
                             GetAccessTokenResult result = getAccessTokenTask.execute().get();
                             if(result.getAccessToken() != null) {
                                 main.setAccessToken(result.getAccessToken());
+                                // サービス起動ボタンを有効にする。
+                                main.launchButton.setEnabled(true);
                             } else if(result.getTwitterException() != null) {
                                 Toast.makeText(main, main.getString(R.string.error_get_access_token_failed) + result.getTwitterException().getStatusCode(), Toast.LENGTH_LONG).show();
                             }
