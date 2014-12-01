@@ -4,18 +4,18 @@ import twitter4j.TwitterException;
 import twitter4j.auth.AccessToken;
 
 /**
- * アクセストークン取得用タスクの実行結果
+ * アクセストークン取得用タスクの実行結果.
  */
 public class GetAccessTokenResult {
 
-    /** アクセストークン */
+    /** アクセストークン. */
     private AccessToken accessToken = null;
     
-    /** 例外 */
+    /** 例外. */
     private TwitterException twitterException = null;
 
     /**
-     * アクセストークンを取得する。
+     * アクセストークンを取得する.
      * @return アクセストークン
      */
     public AccessToken getAccessToken() {
@@ -23,7 +23,7 @@ public class GetAccessTokenResult {
     }
 
     /**
-     * アクセストークンを設定する。
+     * アクセストークンを設定する.
      * @param accessToken アクセストークン
      */
     public void setAccessToken(AccessToken accessToken) {
@@ -31,7 +31,7 @@ public class GetAccessTokenResult {
     }
 
     /**
-     * 例外を取得する。
+     * 例外を取得する.
      * @return 例外
      */
     public TwitterException getTwitterException() {
@@ -39,8 +39,8 @@ public class GetAccessTokenResult {
     }
 
     /**
-     * 例外を設定する。
-     * @param e
+     * 例外を設定する.
+     * @param e 例外
      */
     public void setTwitterException(TwitterException twitterException) {
         this.twitterException = twitterException;

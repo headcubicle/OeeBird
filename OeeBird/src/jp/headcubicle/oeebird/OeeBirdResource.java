@@ -1,49 +1,49 @@
 package jp.headcubicle.oeebird;
 
 /**
- * 定数クラス
+ * 定数クラス.
  */
 public class OeeBirdResource {
     
     /**
-     * コンストラクタ
+     * コンストラクタ.
      * インスタンスの生成を禁止する。
      */
     private OeeBirdResource() {
         throw new AssertionError();
     }
     
-    /** SharedPreferences: Replyを送るTwitterユーザ */
+    /** SharedPreferences: Replyを送るTwitterユーザ. */
     public static String targetTwitterUser = "TARGET_TWITTER_USER";
-    /** SharedPreferences: Replyを送るTweetに含まれるキーワード */
+    /** SharedPreferences: Replyを送るTweetに含まれるキーワード. */
     public static String targetTweetKeyword = "TARGET_TWEET_KEYWORD";
-    /** SharedPreferences: Replyの内容 */
+    /** SharedPreferences: Replyの内容. */
     public static String replyText = "REPLY_TEXT";
-    /** SharedPreferences: 末尾 */
+    /** SharedPreferences: 末尾. */
     public static String tailText = "TAIL_TEXT";
     
-    /** アクセストークンファイル名 */
+    /** アクセストークンファイル名. */
     public static String accessTokenFileName = "access_token.dat";
     
-    /** OAuth認証用ConsumerKey */
+    /** OAuth認証用ConsumerKey. */
     public static String consumerKey = "DmINyUJz1obXoLqutRjYw";
     
-    /** OAuth認証用ConsumerSecret */
+    /** OAuth認証用ConsumerSecret. */
     public static String consumerSecret = "ztuiAa6urhBYdCSbZoZ08byrc0Z6SeKSTfiTpr47w";
 
-    /** IntentExtra: Replyを送るTwitterユーザ */
+    /** IntentExtra: Replyを送るTwitterユーザ. */
     public static String extraTargetTwitterUser = "jp.headcubicle.oeebird.intent.targetTwitterUser";
-    /** IntentExtra: Replyを送るTweetに含まれるキーワード */
+    /** IntentExtra: Replyを送るTweetに含まれるキーワード. */
     public static String extraTargetTweetKeyword = "jp.headcubicle.oeebird.intent.targetTweetKeyword";
-    /** IntentExtra: Replyの内容 */
+    /** IntentExtra: Replyの内容. */
     public static String extraReplyText = "jp.headcubicle.oeebird.intent.replyText";
-    /** IntentExtra: 末尾 */
+    /** IntentExtra: 末尾. */
     public static String extraTailText = "jp.headcubicle.oeebird.intent.tailText";
-    /** IntentExtra: Twitter */
+    /** IntentExtra: Twitter. */
     public static String extraTwitter = "jp.headcubicle.oeebird.intent.twitter";
-    /** IntentExtra: アクセストークン */
+    /** IntentExtra: アクセストークン. */
     public static String extraAccessToken = "jp.headcubicle.oeebird.intent.accessToken";
     
-    /** Notification ID: サービス起動 */
+    /** Notification ID: サービス起動. */
     public static int idServiceLaunch = 1;
 }

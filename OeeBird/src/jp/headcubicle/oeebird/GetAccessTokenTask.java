@@ -1,30 +1,29 @@
 package jp.headcubicle.oeebird;
 
+import android.os.AsyncTask;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.auth.RequestToken;
-import android.os.AsyncTask;
 
 /**
- * アクセストークン取得用タスク
+ * アクセストークン取得用タスク.
  */
 public class GetAccessTokenTask extends AsyncTask<Void, Void, GetAccessTokenResult> {
     
-    /** Twitter */
+    /** Twitter. */
     private Twitter twitter = null;
     
-    /** リクエストトークン */
+    /** リクエストトークン. */
     private RequestToken requestToken = null;
     
-    /** 実行結果 */
+    /** 実行結果. */
     private GetAccessTokenResult result = null;
     
-    /** PIN */
+    /** PIN. */
     private String pin = null;
     
     /**
-     * コンストラクタ
-     * @param main 呼び出し元Activity
+     * コンストラクタ.
      * @param requestToken リクエストトークン
      * @param pin pin
      */
@@ -41,7 +40,7 @@ public class GetAccessTokenTask extends AsyncTask<Void, Void, GetAccessTokenResu
         result = new GetAccessTokenResult();
         
         try {
-            if(pin.length() > 0) {
+            if (pin.length() > 0) {
                 result.setAccessToken(twitter.getOAuthAccessToken(requestToken, pin));
             } else {
                 result.setAccessToken(twitter.getOAuthAccessToken());

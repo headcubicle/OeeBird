@@ -4,30 +4,33 @@ import android.content.Intent;
 import android.os.AsyncTask;
 
 /**
- * Tweetサービス起動用タスク
+ * Tweetサービス起動用タスク.
  */
 public class LaunchTweetServiceTask extends AsyncTask<Void, Void, Void> {
 
-    /** Activity */
+    /** Activity. */
     private MainActivity mainActivity = null;
-    /** Replyを送るTwitterユーザ */
+    /** Replyを送るTwitterユーザ. */
     private String targetTwitterUser = null;
-    /** Replyを送るTweetに含まれるキーワード */
+    /** Replyを送るTweetに含まれるキーワード. */
     private String targetTweetKeyword = null;
-    /** replyの内容 */
+    /** replyの内容. */
     private String replyText = null;
-    /** 末尾 */
+    /** 末尾. */
     private String tailText = null;
 
     /**
-     * コンストラクタ
+     * コンストラクタ.
      * @param mainActivity Activity
      * @param targetTwitterUser Reply送信先Twitterユーザ
      * @param replyText Replyの内容
      * @param tailText 末尾
      */
     public LaunchTweetServiceTask(MainActivity mainActivity,
-            String targetTwitterUser, String targetTweetKeyword, String replyText, String tailText) {
+                                String targetTwitterUser,
+                                String targetTweetKeyword,
+                                String replyText,
+                                String tailText) {
         super();
         this.mainActivity = mainActivity;
         this.targetTwitterUser = targetTwitterUser;
@@ -37,7 +40,7 @@ public class LaunchTweetServiceTask extends AsyncTask<Void, Void, Void> {
     }
 
     /**
-     * Tweetサービスを起動する。
+     * Tweetサービスを起動する.
      */
     @Override
     protected Void doInBackground(Void... params) {

@@ -1,22 +1,5 @@
 package jp.headcubicle.oeebird;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
-import java.util.concurrent.ExecutionException;
-
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
-import twitter4j.conf.Configuration;
-import twitter4j.conf.ConfigurationBuilder;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -37,26 +20,43 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
+import java.util.concurrent.ExecutionException;
+
 public class MainActivity extends Activity {
 
-    /** Twitter */
+    /** Twitter. */
     private Twitter twitter = null;
-    /** リクエストトークン */
+    /** リクエストトークン. */
     private RequestToken requestToken = null;
-    /** アクセストークン */
+    /** アクセストークン. */
     private AccessToken accessToken = null;
-    /** アプリケーション認証用PIN */
+    /** アプリケーション認証用PIN. */
     private String pin = null;
-    /** Replyを送るTwitterユーザ */
+    /** Replyを送るTwitterユーザ. */
     private String targetTwitterUser = null;
-    /** Replyを送るTweetに含まれるキーワード */
+    /** Replyを送るTweetに含まれるキーワード. */
     private String targetTweetKeyword = null;
-    /** replyの内容 */
+    /** replyの内容. */
     private String replyText = null;
-    /** 末尾 */
+    /** 末尾. */
     private String tailText = null;
     
-    /** サービス起動ボタン */
+    /** サービス起動ボタン. */
     private Button launchButton = null;
     
     @Override
@@ -115,13 +115,15 @@ public class MainActivity extends Activity {
             // サービス起動ボタンを無効とする。
             launchButton.setEnabled(false);
         } catch (StreamCorruptedException e) {
-            Toast.makeText(this, R.string.error_stream_corrupted_exception, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.error_stream_corrupted_exception, Toast.LENGTH_LONG)
+                .show();
             e.printStackTrace();
         } catch (IOException e) {
             Toast.makeText(this, R.string.error_io_exception, Toast.LENGTH_LONG).show();
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            Toast.makeText(this, R.string.error_class_not_found_exception, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.error_class_not_found_exception, Toast.LENGTH_LONG)
+                .show();
             e.printStackTrace();
         }
         
@@ -151,7 +153,7 @@ public class MainActivity extends Activity {
     }
     
     /**
-     * 設定ボタンタップ
+     * 設定ボタンタップ.
      */
     public void onClickSettings(View view) {
         // 設定を保存する。
@@ -160,10 +162,12 @@ public class MainActivity extends Activity {
 
         // Replyを送るTwitterユーザ
         EditText targetTwitterUserEdit = (EditText) findViewById(R.id.target_twitter_user);
-        editor.putString(OeeBirdResource.targetTwitterUser, targetTwitterUserEdit.getText().toString());
+        editor.putString(OeeBirdResource.targetTwitterUser,
+                        targetTwitterUserEdit.getText().toString());
         // Replyを送るTweetに含まれるキーワード
         EditText targetTweetKeywordEdit = (EditText) findViewById(R.id.target_tweet_keyword);
-        editor.putString(OeeBirdResource.targetTweetKeyword, targetTweetKeywordEdit.getText().toString());
+        editor.putString(OeeBirdResource.targetTweetKeyword,
+                        targetTweetKeywordEdit.getText().toString());
         // Replyの内容
         EditText replyTextEdit = (EditText) findViewById(R.id.reply_text);
         editor.putString(OeeBirdResource.replyText, replyTextEdit.getText().toString());
@@ -175,17 +179,20 @@ public class MainActivity extends Activity {
         editor.commit();
         
         // アクセストークンが保存されていない場合、OAuth認証を行う。
-        if(null == accessToken) {
+        if (null == accessToken) {
             GetRequestTokenTask getRequestTokenTask = new GetRequestTokenTask(twitter);
             GetRequestTokenResult result = null;
             
-            if(null == requestToken) {
+            if (null == requestToken) {
                 try {
                     result = getRequestTokenTask.execute().get();
-                    if(result.getRequestToken() != null) {
+                    if (result.getRequestToken() != null) {
                         requestToken = result.getRequestToken();                        
-                    } else if(result.getTwitterException() != null) {
-                        Toast.makeText(this, getString(R.string.error_get_request_token_failed) + result.getTwitterException().getStatusCode(), Toast.LENGTH_LONG).show();
+                    } else if (result.getTwitterException() != null) {
+                        Toast.makeText(this,
+                                    getString(R.string.error_get_request_token_failed)
+                                    + result.getTwitterException().getStatusCode(),
+                                    Toast.LENGTH_LONG).show();
                     }
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
@@ -194,7 +201,7 @@ public class MainActivity extends Activity {
                 }
             }
             
-            if(requestToken != null) {
+            if (requestToken != null) {
                 // ブラウザ起動
                 Uri authenticationUri = Uri.parse(requestToken.getAuthenticationURL());
                 Intent intent = new Intent(Intent.ACTION_VIEW, authenticationUri);
@@ -208,7 +215,7 @@ public class MainActivity extends Activity {
     }
     
     /**
-     * 起動ボタンをタップ
+     * 起動ボタンをタップ.
      */
     public void onClickLaunch(View view) throws TwitterException {
         // サービス起動
@@ -224,7 +231,7 @@ public class MainActivity extends Activity {
     }
     
     /**
-     * 停止ボタンをタップ
+     * 停止ボタンをタップ.
      */
     public void onClickStop(View view) {
         // サービス停止
@@ -234,7 +241,7 @@ public class MainActivity extends Activity {
     }
     
     /**
-     * PIN入力ダイアログ
+     * PIN入力ダイアログ.
      */
     public static class PinDialogFragment extends DialogFragment {
 
@@ -242,7 +249,8 @@ public class MainActivity extends Activity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             
-            LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater)getActivity()
+                                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View content = inflater.inflate(R.layout.dialog_pin, null);
             
             builder.setTitle(R.string.label_my_twitter_pin);
@@ -256,16 +264,20 @@ public class MainActivity extends Activity {
                     String pin = pinEdit.getText().toString();
                     
                     // アクセストークンを取得する。
-                    if(!pin.isEmpty()) {
-                        GetAccessTokenTask getAccessTokenTask = new GetAccessTokenTask(main.getTwitter(), main.getRequestToken(), pin);
+                    if (!pin.isEmpty()) {
+                        GetAccessTokenTask getAccessTokenTask = new GetAccessTokenTask(main.getTwitter(),
+                                                                                    main.getRequestToken(),
+                                                                                    pin);
                         try {
                             GetAccessTokenResult result = getAccessTokenTask.execute().get();
-                            if(result.getAccessToken() != null) {
+                            if (result.getAccessToken() != null) {
                                 main.setAccessToken(result.getAccessToken());
                                 // サービス起動ボタンを有効にする。
                                 main.launchButton.setEnabled(true);
-                            } else if(result.getTwitterException() != null) {
-                                Toast.makeText(main, main.getString(R.string.error_get_access_token_failed) + result.getTwitterException().getStatusCode(), Toast.LENGTH_LONG).show();
+                            } else if (result.getTwitterException() != null) {
+                                Toast.makeText(main, main.getString(R.string.error_get_access_token_failed)
+                                                                    + result.getTwitterException().getStatusCode(),
+                                                                    Toast.LENGTH_LONG).show();
                             }
                         } catch (InterruptedException e1) {
                             e1.printStackTrace();
@@ -275,15 +287,20 @@ public class MainActivity extends Activity {
                         
                         // アクセストークンを保存する。
                         try {
-                            FileOutputStream fos = main.openFileOutput(OeeBirdResource.accessTokenFileName, MODE_PRIVATE);
+                            FileOutputStream fos = main.openFileOutput(OeeBirdResource.accessTokenFileName,
+                                                                    MODE_PRIVATE);
                             ObjectOutputStream oos = new ObjectOutputStream(fos);
                             oos.writeObject(main.getAccessToken());
                             oos.close();
                         } catch (FileNotFoundException e) {
-                            Toast.makeText(main, R.string.error_file_not_found_exception, Toast.LENGTH_LONG).show();
+                            Toast.makeText(main,
+                                            R.string.error_file_not_found_exception,
+                                            Toast.LENGTH_LONG).show();
                             e.printStackTrace();
                         } catch (IOException e) {
-                            Toast.makeText(main, R.string.error_io_exception, Toast.LENGTH_LONG).show();
+                            Toast.makeText(main,
+                                            R.string.error_io_exception,
+                                            Toast.LENGTH_LONG).show();
                             e.printStackTrace();
                         }
                     }
@@ -303,7 +320,7 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * PINを取得する。
+     * PINを取得する.
      * @return PIN
      */
     public String getPin() {
@@ -311,15 +328,15 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * PINを設定する。
-     * @param pin
+     * PINを設定する.
+     * @param pin PIN
      */
     public void setPin(String pin) {
         this.pin = pin;
     }
 
     /**
-     * リクエストトークンを取得する。
+     * リクエストトークンを取得する.
      * @return リクエストトークン
      */
     public RequestToken getRequestToken() {
@@ -327,7 +344,7 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * リクエストトークンを設定する。
+     * リクエストトークンを設定する.
      * @param requestToken リクエストトークン
      */
     public void setRequestToken(RequestToken requestToken) {
@@ -335,7 +352,7 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * アクセストークンを取得する。
+     * アクセストークンを取得する.
      * @return アクセストークン
      */
     public AccessToken getAccessToken() {
@@ -343,7 +360,7 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * アクセストークンを設定する。
+     * アクセストークンを設定する.
      * @param accessToken アクセストークン
      */
     public void setAccessToken(AccessToken accessToken) {
@@ -351,7 +368,7 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * Twitterを取得する。
+     * Twitterを取得する.
      * @return Twitter
      */
     public Twitter getTwitter() {
@@ -359,7 +376,7 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * Twitterを設定する。
+     * Twitterを設定する.
      * @param twitter Twitter
      */
     public void setTwitter(Twitter twitter) {

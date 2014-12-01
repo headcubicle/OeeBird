@@ -1,5 +1,14 @@
 package jp.headcubicle.oeebird;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import twitter4j.DirectMessage;
 import twitter4j.StallWarning;
 import twitter4j.Status;
@@ -14,47 +23,40 @@ import twitter4j.UserStreamListener;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
-import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 
 /**
- * Tweet用サービス
+ * Tweet用サービス.
  */
 public class TweetService extends Service {
 
-    /** Replyを送るTwitterユーザ */
+    /** Replyを送るTwitterユーザ. */
     private String targetTwitterUser = null;
-    /** Replyを送るTweetに含まれるキーワード */
+    /** Replyを送るTweetに含まれるキーワード. */
     private String targetTweetKeyword = null;
-    /** replyの内容 */
+    /** replyの内容. */
     private String replyText = null;
-    /** 末尾 */
+    /** 末尾. */
     private String tailText = null;
-    /** Twitter */
+    /** Twitter. */
     private Twitter twitter = null;
-    /** アクセストークン */
+    /** アクセストークン. */
     private AccessToken accessToken = null;
     
-    /** */
+    /** Twitterストリーム. */
     private TwitterStream twitterStream = null;
 
     UserStreamListener userStreamListener = new UserStreamListener() {
 
         @Override
         public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
-            Log.d("onDeletionNotice", "Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
+            Log.d("onDeletionNotice",
+                    "Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
         }
 
         @Override
         public void onScrubGeo(long userId, long upToStatusId) {
-            Log.d("onScrubGeo", "Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
+            Log.d("onScrubGeo",
+                    "Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
         }
 
         @Override
@@ -66,16 +68,16 @@ public class TweetService extends Service {
         public void onStatus(Status status) {
             Log.d("onStatus", "Status: " + status);
             // 対象ユーザが特定のTweetをした場合にReplyを送る。
-            if(status.getUser().getName().equals(targetTwitterUser)) {
-                if(status.getText().contains(targetTweetKeyword)) {
-                    for(Status result = null; result == null;) {
+            if (status.getUser().getName().equals(targetTwitterUser)) {
+                if (status.getText().contains(targetTweetKeyword)) {
+                    for (Status result = null; result == null;) {
                         replyText += tailText;
                         try {
                             result = twitter.updateStatus("@" + targetTwitterUser + " " + replyText);
                         } catch (TwitterException e) {
                             e.printStackTrace();
                             // Tweet重複の場合のみ再送する。
-                            if(e.getErrorCode() != 187) {
+                            if (e.getErrorCode() != 187) {
                                 break;
                             }
                         }
@@ -86,7 +88,8 @@ public class TweetService extends Service {
 
         @Override
         public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
-            Log.d("onTrackLimitationNotice", "Got track limitation notice:" + numberOfLimitedStatuses);
+            Log.d("onTrackLimitationNotice",
+                    "Got track limitation notice:" + numberOfLimitedStatuses);
         }
 
         @Override
@@ -187,7 +190,7 @@ public class TweetService extends Service {
     }
     
     /**
-     * サービス起動
+     * サービス起動.
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -204,7 +207,8 @@ public class TweetService extends Service {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(mainIntent);
-        PendingIntent mainPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent mainPendingIntent = stackBuilder.getPendingIntent(0,
+                                                                        PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(mainPendingIntent);
         
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -237,7 +241,7 @@ public class TweetService extends Service {
     }
 
     /**
-     * サービス停止
+     * サービス停止.
      */
     @Override
     public void onDestroy() {

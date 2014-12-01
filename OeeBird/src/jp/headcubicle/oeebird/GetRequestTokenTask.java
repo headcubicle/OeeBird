@@ -1,19 +1,19 @@
 package jp.headcubicle.oeebird;
 
+import android.os.AsyncTask;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import android.os.AsyncTask;
 
 /**
- * リクエストトークン取得用タスク
+ * リクエストトークン取得用タスク.
  */
 public class GetRequestTokenTask extends AsyncTask<Void, Void, GetRequestTokenResult> {
 
-    /** Twitter */
+    /** Twitter. */
     Twitter twitter = null;
     
     /**
-     * コンストラクタ
+     * コンストラクタ.
      * @param main　呼び出し元のActivity
      */
     public GetRequestTokenTask(Twitter twitter) {
