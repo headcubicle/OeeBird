@@ -198,7 +198,7 @@ public class TweetService extends Service {
         
         // ステータスバーに通知を表示する。        
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                                                    .setSmallIcon(R.drawable.ic_launcher)
+                                                    .setSmallIcon(R.drawable.oeebird)
                                                     .setContentTitle(getString(R.string.notification_title_service_launch))
                                                     .setContentText(getString(R.string.notification_text_service_launch));
 
